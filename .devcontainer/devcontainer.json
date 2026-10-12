@@ -1,0 +1,58 @@
+{
+    // Environnement de développement prêt à l'emploi, pour GitHub Codespaces
+    // et pour l'extension « Dev Containers » de VS Code.
+    //
+    // Le conteneur embarque Docker : il relance le compose.yaml du dépôt
+    // (application PHP et base PostgreSQL). Les commandes sont donc exactement
+    // celles de CONTRIBUTING.md, par exemple :
+    //     docker compose exec app composer check
+    "name": "Suivi de la qualité de l'eau potable",
+
+    // Version LTS figée plutôt que l'étiquette flottante « ubuntu », pour que
+    // l'environnement se construise de la même façon d'un mois sur l'autre.
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+
+    // Une seule fois, à la création : fichier .env, hook de commit,
+    // construction de l'image et installation des outils avec Composer.
+    "postCreateCommand": ".devcontainer/initialiser.sh",
+
+    // À chaque démarrage, y compris après une mise en veille du Codespace.
+    "postStartCommand": ".devcontainer/attendre-docker.sh && docker compose up -d",
+
+    "forwardPorts": [8080],
+    "portsAttributes": {
+        "8080": {
+            "label": "Application",
+            "onAutoForward": "notify"
+        },
+        "5432": {
+            "label": "Base PostgreSQL",
+            "onAutoForward": "silent"
+        }
+    },
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "EditorConfig.EditorConfig",
+                "GitHub.copilot-chat"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                // PHP tourne dans le conteneur « app », pas dans celui de l'éditeur :
+                // la validation intégrée de VS Code ne trouverait pas l'exécutable.
+                // PHPStan et PHP-CS-Fixer font ce travail, via `composer check`.
+                "php.validate.enable": false,
+                "intelephense.environment.phpVersion": "8.4.0"
+            }
+        }
+    },
+
+    "remoteUser": "vscode"
+}

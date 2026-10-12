@@ -1,0 +1,46 @@
+# Vérifie que l'environnement Codespaces se construit et fonctionne.
+#
+# La CI applicative (ci.yml) installe PHP directement sur le runner : une casse
+# du devcontainer ne s'y verrait pas, et ne se découvrirait qu'à l'ouverture
+# d'un Codespace. Ce workflow construit réellement le devcontainer, laisse son
+# script d'initialisation démarrer l'application, puis y lance `composer check`.
+#
+# Il ne tourne que si l'environnement change, ou à la demande.
+name: Devcontainer
+
+on:
+  pull_request:
+    paths:
+      - ".devcontainer/**"
+      - "compose.yaml"
+      - "docker/**"
+      - ".env.example"
+      - ".github/workflows/devcontainer.yml"
+  push:
+    branches: [main]
+    paths:
+      - ".devcontainer/**"
+      - "compose.yaml"
+      - "docker/**"
+      - ".env.example"
+      - ".github/workflows/devcontainer.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  devcontainer:
+    name: Construit le devcontainer et y lance les vérifications
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Construit le devcontainer, puis lance composer check à l'intérieur
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: |
+            docker compose ps
+            docker compose exec -T app composer check
+            curl --fail --silent http://localhost:8080/ | grep "PostgreSQL"
