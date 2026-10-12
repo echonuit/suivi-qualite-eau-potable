@@ -188,7 +188,7 @@ L'application est écrite en PHP, sans framework : la pile technique est fixée 
 - Passez à `htmlspecialchars` tout ce qui vient de l'API ou de l'adresse avant de l'afficher : un libellé de paramètre ou une valeur de `$_GET` est une donnée extérieure comme une autre.
 - Testez la logique métier avec PHPUnit, lancé par l'intégration continue.
 
-Sans framework ne veut pas dire sans outil. Le dépôt fournit Composer avec les outils de développement (PHPUnit, PHPStan, PHP-CS-Fixer), un environnement Docker avec PostgreSQL et une intégration continue : [CONTRIBUTING.md](CONTRIBUTING.md) explique comment les installer et s'en servir. Avant d'ajouter une bibliothèque à l'application elle-même, demandez l'accord de l'équipe pédagogique. La bibliothèque JavaScript de graphiques fait exception : elle tourne dans le navigateur, et vous en avez besoin dès le début.
+Sans framework ne veut pas dire sans outil. Le dépôt fournit Composer avec les outils de développement (PHPUnit, PHPStan, PHP-CS-Fixer), un environnement Docker avec PostgreSQL, qui s'ouvre aussi dans un Codespace sans rien installer, et une intégration continue : [CONTRIBUTING.md](CONTRIBUTING.md) explique comment les installer et s'en servir. Avant d'ajouter une bibliothèque à l'application elle-même, demandez l'accord de l'équipe pédagogique. La bibliothèque JavaScript de graphiques fait exception : elle tourne dans le navigateur, et vous en avez besoin dès le début.
 
 ## Livrables et organisation
 
