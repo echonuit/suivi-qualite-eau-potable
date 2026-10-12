@@ -1,0 +1,8 @@
+# Fins de ligne normalisées en LF dans le dépôt, quel que soit le système de chacun
+* text=auto eol=lf
+
+# Les fichiers de test se gardent à l'octet près : ce sont des extraits réels
+# (réponses de l'API, lignes du catalogue E-Phy), encodage et fins de ligne compris.
+tests/fichiers/** -text
+*.png binary
+*.zip binary

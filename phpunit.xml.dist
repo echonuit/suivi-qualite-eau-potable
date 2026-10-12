@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configuration des tests : https://docs.phpunit.de -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         cacheDirectory=".phpunit.cache"
+         colors="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         failOnEmptyTestSuite="true">
+    <testsuites>
+        <!-- La logique métier se teste sans base, sans réseau et sans serveur web -->
+        <testsuite name="metier">
+            <directory>tests/Metier</directory>
+        </testsuite>
+        <!-- Ces tests ont besoin de la base PostgreSQL démarrée -->
+        <testsuite name="donnees">
+            <directory>tests/Donnees</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+</phpunit>

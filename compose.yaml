@@ -1,0 +1,51 @@
+# Environnement de développement : l'application PHP et sa base PostgreSQL.
+#
+#     docker compose up -d --build              démarre les deux services
+#     docker compose exec app composer install  installe les outils (une seule fois)
+#     docker compose down                       arrête tout, les données sont conservées
+#
+# Les valeurs ${...} se règlent dans le fichier .env (modèle : .env.example).
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    user: "${UID_GID:-0:0}"
+    ports:
+      - "127.0.0.1:${PORT_WEB:-8080}:80"
+    volumes:
+      # Le dépôt est monté tel quel : une modification du code est visible tout de suite.
+      - .:/var/www/html
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/zz-projet.ini:ro
+    environment:
+      DB_HOST: base
+      DB_PORT: "5432"
+      DB_NAME: ${DB_NAME:-eau}
+      DB_USER: ${DB_USER:-eau}
+      DB_PASSWORD: ${DB_PASSWORD:-eau}
+    depends_on:
+      base:
+        condition: service_healthy
+
+  # La base sert au cache, au catalogue E-Phy et, si vous le choisissez, aux données importées.
+  base:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${DB_NAME:-eau}
+      POSTGRES_USER: ${DB_USER:-eau}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-eau}
+    ports:
+      # Ouvert sur votre machine seulement, pour s'y connecter avec psql ou un client SQL.
+      - "127.0.0.1:${PORT_BASE:-5432}:5432"
+    volumes:
+      - base:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-eau} -d ${DB_NAME:-eau}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  # Données de la base, conservées entre deux démarrages
+  base:

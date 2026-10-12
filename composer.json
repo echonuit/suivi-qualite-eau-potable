@@ -1,0 +1,52 @@
+{
+    "name": "echonuit/suivi-qualite-eau-potable",
+    "description": "Site web de suivi dans le temps de la qualité de l'eau potable, à partir des données ouvertes du contrôle sanitaire",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "ext-curl": "*",
+        "ext-mbstring": "*",
+        "ext-pdo": "*",
+        "ext-pdo_pgsql": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "phpstan/phpstan": "^2.3",
+        "phpunit/phpunit": "^13.4",
+        "spaze/phpstan-disallowed-calls": "^4.14"
+    },
+    "autoload": {
+        "psr-4": {
+            "EauPotable\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EauPotable\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "format": "php-cs-fixer fix",
+        "format:check": "php-cs-fixer check --diff",
+        "analyse": "phpstan analyse --memory-limit=1G",
+        "test": "phpunit",
+        "test:metier": "phpunit --testsuite metier",
+        "check": [
+            "@format:check",
+            "@analyse",
+            "@test"
+        ]
+    },
+    "scripts-descriptions": {
+        "format": "Met le code en forme (PHP-CS-Fixer)",
+        "format:check": "Vérifie la mise en forme sans rien modifier",
+        "analyse": "Cherche les erreurs sans exécuter le code (PHPStan)",
+        "test": "Lance tous les tests (PHPUnit), base de données comprise",
+        "test:metier": "Lance les seuls tests de la logique métier, sans base ni réseau",
+        "check": "Enchaîne mise en forme, analyse et tests, comme l'intégration continue"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

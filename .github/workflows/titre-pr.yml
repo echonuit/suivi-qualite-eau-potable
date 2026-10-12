@@ -1,0 +1,24 @@
+# Vérifie que le titre de la pull request suit Conventional Commits.
+# Avec la fusion en squash, c'est ce titre qui devient le message du commit sur main.
+name: Titre de la pull request
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  titre:
+    name: Titre au format Conventional Commits
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Vérifie le titre
+        # Le titre passe par une variable d'environnement : écrit directement
+        # dans la commande, un titre malveillant pourrait y injecter du code.
+        env:
+          TITRE: ${{ github.event.pull_request.title }}
+        run: .github/scripts/verifie-titre.sh "$TITRE"

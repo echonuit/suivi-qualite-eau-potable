@@ -1,0 +1,72 @@
+# Intégration continue : rejoue sur GitHub ce que `composer check` fait sur votre machine.
+name: Qualité
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# Un nouveau commit sur la même branche annule la vérification en cours du précédent.
+concurrency:
+  group: qualite-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualite:
+    name: Mise en forme, analyse et tests
+    runs-on: ubuntu-latest
+
+    # La même base PostgreSQL que dans compose.yaml, pour les tests de tests/Donnees
+    services:
+      base:
+        image: postgres:17
+        env:
+          POSTGRES_DB: eau
+          POSTGRES_USER: eau
+          POSTGRES_PASSWORD: eau
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U eau -d eau"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: "5432"
+      DB_NAME: eau
+      DB_USER: eau
+      DB_PASSWORD: eau
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Installe PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: curl, mbstring, pdo_pgsql
+          coverage: none
+          tools: composer:v2
+
+      - name: Vérifie composer.json et composer.lock
+        run: composer validate
+
+      - name: Installe les dépendances
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Cherche les failles connues dans les dépendances
+        run: composer audit
+
+      - name: Vérifie la mise en forme
+        run: composer format:check
+
+      - name: Analyse le code
+        run: composer analyse
+
+      - name: Lance les tests
+        run: composer test

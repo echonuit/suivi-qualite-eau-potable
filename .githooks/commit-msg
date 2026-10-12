@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Vérifie le message de chaque commit avant de l'enregistrer.
+# Activation, une fois par clone : git config core.hooksPath .githooks
+
+sujet="$(head -n 1 "$1")"
+
+# Les messages que Git écrit lui-même passent tels quels.
+case "$sujet" in
+    "Merge "* | "Revert "* | "fixup! "* | "squash! "*) exit 0 ;;
+esac
+
+"$(git rev-parse --show-toplevel)/.github/scripts/verifie-titre.sh" "$sujet"

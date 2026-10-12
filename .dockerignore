@@ -1,0 +1,3 @@
+# L'image ne copie que docker/ : inutile d'envoyer le reste au moment du build.
+*
+!docker/

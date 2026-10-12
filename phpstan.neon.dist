@@ -1,0 +1,57 @@
+# Analyse statique : PHPStan lit le code sans l'exécuter et signale les erreurs.
+# Documentation : https://phpstan.org/user-guide/getting-started
+
+includes:
+    - vendor/spaze/phpstan-disallowed-calls/extension.neon
+
+parameters:
+    # De 0 (indulgent) à 10 (strict). Au niveau 8, chaque paramètre, retour et propriété
+    # a un type, un tableau dit ce qu'il contient (array<string, float>), et une valeur
+    # qui peut être null se vérifie avant d'être utilisée.
+    level: 8
+    paths:
+        - public
+        - src
+        - tests
+
+    # Trois règles du sujet, vérifiées automatiquement.
+
+    # 1. La logique métier et l'accès aux données ne lisent jamais la requête HTTP :
+    #    seules les pages le font, et elles passent les valeurs en paramètres.
+    disallowedSuperglobals:
+        -
+            superglobal:
+                - '$_GET'
+                - '$_POST'
+                - '$_FILES'
+                - '$_REQUEST'
+                - '$_COOKIE'
+                - '$_SESSION'
+            message: 'la requête HTTP se lit dans public/ ou src/Pages/, puis se passe en paramètre.'
+            allowIn:
+                - public/*
+                - src/Pages/*
+
+    disallowedFunctionCalls:
+        # 2. Les appels réseau restent dans la couche d'accès aux données : la logique
+        #    métier se teste alors sans dépendre de la disponibilité de Hub'Eau.
+        -
+            function: 'curl_*()'
+            message: 'les appels réseau se font dans src/Donnees/.'
+            allowIn:
+                - src/Donnees/*
+        # Les traces de débogage ne se commitent pas.
+        -
+            function:
+                - 'var_dump()'
+                - 'print_r()'
+                - 'var_export()'
+            message: 'trace de débogage oubliée.'
+
+    # 3. Des requêtes préparées partout, sans exception.
+    disallowedMethodCalls:
+        -
+            method:
+                - 'PDO::query()'
+                - 'PDO::exec()'
+            message: 'utilisez prepare() puis execute(), y compris pour une requête sans paramètre.'

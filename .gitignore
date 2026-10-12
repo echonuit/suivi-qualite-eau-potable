@@ -1,0 +1,19 @@
+# Dépendances installées par Composer : elles se retéléchargent avec `composer install`
+/vendor/
+
+# Secrets et réglages propres à chaque machine (le modèle est .env.example)
+.env
+
+# Caches des outils qualité
+/.phpunit.cache/
+/.php-cs-fixer.cache
+
+# Fichiers téléchargés ou produits pendant les essais : archives annuelles de
+# data.gouv.fr (240 à 310 Mo chacune), catalogue E-Phy, cache
+/var/
+
+# Éditeurs et systèmes
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
