@@ -53,6 +53,8 @@ Le dépôt reprend les trois couches que demande le sujet.
 | `docs/` | L'ébauche de la page d'un réseau, et vos documents : note d'architecture, inventaire des données, documentation technique |
 | `docker/`, `compose.yaml` | L'environnement de développement |
 | `.github/` | L'intégration continue et le modèle de pull request |
+| `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md` | Les consignes que lisent les assistants IA, réglés ici en tuteurs. Elles relèvent de l'équipe pédagogique |
+| `.vscode/` | Les réglages de VS Code partagés par l'équipe |
 
 Chaque couche contient une classe d'exemple : `CodeReseau`, `Diagnostic` et `Accueil`. Elles montrent la forme attendue et sont faites pour être remplacées par les vôtres.
 
@@ -252,6 +254,36 @@ feat(url)!: place la période dans le chemin de l'adresse
 BREAKING CHANGE: les adresses partagées avant ce commit perdent leur période.
 ```
 
+### La mention d'assistance IA
+
+Si un assistant IA vous a aidés pour un commit, le message le dit dans un dernier bloc, séparé du reste par une ligne vide.
+
+```
+fix(limites): lit la virgule décimale des valeurs publiées
+
+L'API publie les valeurs sous la forme « 0,80 » : la virgule faisait
+échouer la conversion en nombre.
+
+Closes #31
+
+Assisted-by: Claude Code (claude-sonnet-5-5)
+Prompt: mon test sur 0,80 echoue alors que celui avec 50 passe, pourquoi ?
+Prompt: je vois pas le rapport avec la virgule
+```
+
+- `Assisted-by:` donne l'outil et le modèle.
+- Chaque ligne `Prompt:` recopie mot pour mot un prompt que vous avez envoyé pour ce travail, dans l'ordre, fautes de frappe comprises. Un bloc collé se remplace par `[bloc collé : N lignes]`, un mot de passe ou une clé par `[secret masqué]`.
+
+La règle vaut quel que soit le niveau d'aide, d'une simple explication à une ligne de code. C'est une exigence de transparence : en relisant l'historique, on doit pouvoir savoir quelle part du travail a été assistée, et comment.
+
+Les assistants réglés par ce dépôt ajoutent ce bloc d'eux-mêmes quand ils vous aident à écrire le message. Si vous avez utilisé un outil hors du dépôt, un chat dans le navigateur par exemple, c'est à vous de l'écrire.
+
+Ces lignes restent lisibles après la fusion en squash, dans l'onglet « Commits » de la pull request. Sur une branche, cette commande les affiche :
+
+```bash
+git log --format='%h %s%n%(trailers:key=Assisted-by,key=Prompt)'
+```
+
 ### Le titre de la pull request
 
 Comme la fusion se fait en squash, les commits de votre branche sont réunis en un seul sur `main`, et son message est le titre de la pull request. C'est donc ce titre qu'il faut soigner en priorité. Écrire aussi vos commits de branche dans ce format reste une bonne habitude : avec un seul commit, GitHub propose son message comme titre.
@@ -270,6 +302,7 @@ Le modèle de pull request, prérempli à l'ouverture, reprend l'essentiel de ce
 - [ ] La logique métier ajoutée ou modifiée a ses tests
 - [ ] La branche est à jour avec `main`
 - [ ] Le titre de la pull request suit Conventional Commits
+- [ ] Les commits faits avec un assistant IA portent leur mention `Assisted-by` et leurs prompts
 - [ ] La description dit comment vérifier le changement
 - [ ] Le diff ne contient ni code commenté, ni `var_dump` oublié, ni fichier sans rapport avec le sujet
 

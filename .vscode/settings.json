@@ -1,0 +1,19 @@
+{
+    // Les assistants IA de ce dépôt sont réglés en tuteurs (voir AGENTS.md).
+    // La complétion automatique de Copilot est coupée : elle écrirait le code
+    // à votre place. Copilot Chat, lui, reste disponible.
+    "github.copilot.enable": {
+        "*": false
+    },
+
+    // L'assistant peut lancer sans demander les vérifications et les lectures
+    // de Git. Tout le reste (commit, push, modification) attend votre accord.
+    "chat.tools.terminal.outputLocation": "terminal",
+    "chat.tools.terminal.autoApprove": {
+        "/^docker\\s+compose\\s+exec\\s+app\\s+composer\\s+(check|test|test:metier|analyse|format:check)$/": true,
+        "/^git\\s+status\\b/": true,
+        "/^git\\s+diff\\b/": true,
+        "/^git\\s+log\\b/": true,
+        "/^git\\s+branch\\s+--show-current$/": true
+    }
+}

@@ -45,6 +45,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # GitHub Copilot lit sa propre copie des consignes : elle doit rester identique à AGENTS.md.
+      - name: Vérifie que les consignes des assistants IA sont synchronisées
+        run: |
+          if ! cmp --silent AGENTS.md .github/copilot-instructions.md; then
+            echo "::error::AGENTS.md et .github/copilot-instructions.md diffèrent. Modifiez AGENTS.md, puis lancez : cp AGENTS.md .github/copilot-instructions.md"
+            exit 1
+          fi
+
       - name: Installe PHP
         uses: shivammathur/setup-php@v2
         with:
