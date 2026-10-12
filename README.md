@@ -211,6 +211,14 @@ Les règles de travail dans le dépôt (branches, pull requests, messages de com
 
 Le calendrier, la taille des groupes et les modalités d'évaluation sont communiqués par l'équipe pédagogique.
 
+## Assistants IA
+
+Vous pouvez vous faire aider par un assistant IA : Copilot Chat, Claude Code, Codex, Gemini CLI, Cursor... Ce dépôt les règle en tuteurs. Le fichier [AGENTS.md](AGENTS.md), que ces outils lisent d'eux-mêmes, leur demande de ne pas donner la solution : l'assistant explique d'abord le concept, indique ensuite la documentation, et ne donne un minimum de code qu'en dernier recours.
+
+Ce réglage tient à ce que le projet vous demande. Vous expliquerez vos choix au commanditaire à chaque point d'étape, un coéquipier relira chacune de vos pull requests, et une autre équipe pourra reprendre le code l'an prochain. Un code que personne dans l'équipe ne sait expliquer ne passe aucune de ces étapes.
+
+Dans VS Code, la complétion automatique de Copilot est coupée pour ce dépôt, et Copilot Chat reste disponible. Ces réglages se contournent sans difficulté : ils reposent sur votre intérêt à apprendre, pas sur un contrôle.
+
 ## Premiers pas
 
 Les premières séances servent à connaître les données : on ne dessine pas un graphique de pesticides sans avoir vu à quoi ressemble une série de `<0,02`.

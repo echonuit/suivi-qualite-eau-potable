@@ -14,6 +14,9 @@
 
 # Éditeurs et systèmes
 .idea/
-.vscode/
+# De .vscode/, seuls les réglages partagés par l'équipe sont suivis
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .DS_Store
 Thumbs.db
