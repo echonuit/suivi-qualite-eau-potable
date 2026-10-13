@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace EauPotable\Pages;
 
-
 /**
  * Exemple fourni avec le squelette : la page d'accueil dit si l'environnement est prêt.
  *
@@ -70,7 +69,7 @@ final class Accueil
 </div>
 
         <?php
-        return (new Layout("Accueil","Page d'accueil",ob_get_clean()))->afficher();
+        return (new Layout("Accueil", "Page d'accueil", ob_get_clean()))->afficher();
     }
 
     private static function echapper(string $texte): string

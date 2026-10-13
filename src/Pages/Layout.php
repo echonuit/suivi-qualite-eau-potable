@@ -1,14 +1,17 @@
 <?php
 
 namespace EauPotable\Pages;
-class Layout{
-    public function __construct(  
+
+class Layout
+{
+    public function __construct(
         private string $titre,
-        private string $description ,
-        private string $contenu
-    ){}
-      
-    public function afficher(): string{
+        private string $description,
+        private string $contenu,
+    ) {}
+
+    public function afficher(): string
+    {
         ob_start();?>
 <!DOCTYPE html>
 <html lang="fr">
