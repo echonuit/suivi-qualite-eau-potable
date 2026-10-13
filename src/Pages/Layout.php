@@ -1,6 +1,5 @@
 <?php
 
-namespace modules\template\views;
 class Layout{
     public function __construct(  
         private string $titre,
