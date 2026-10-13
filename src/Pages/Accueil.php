@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace EauPotable\Pages;
 
-use EauPotable\Donnees\Connexion;
-use EauPotable\Donnees\Diagnostic;
-use PDOException;
 
 /**
  * Exemple fourni avec le squelette : la page d'accueil dit si l'environnement est prêt.
@@ -18,33 +15,62 @@ final class Accueil
 {
     public function afficher(): string
     {
-        try {
-            $base = 'PostgreSQL ' . (new Diagnostic(Connexion::ouvrir()))->versionPostgresql();
-        } catch (PDOException $erreur) {
-            $base = 'injoignable (' . $erreur->getMessage() . ')';
-        }
+        ob_start(); ?>
+    
+<div >
+    <section >
+        <div >
+            <span >QUALITÉ DE L'EAU EN FRANCE</span>
 
-        $php = self::echapper(PHP_VERSION);
-        $base = self::echapper($base);
+            <h1>
+                Comprendre et explorer
+                <span>la qualité de notre eau.</span>
+            </h1>
 
-        return <<<HTML
-            <!doctype html>
-            <html lang="fr">
-            <head>
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <title>Suivi de la qualité de l'eau potable</title>
-            </head>
-            <body>
-                <h1>Suivi de la qualité de l'eau potable</h1>
-                <p>État de l'environnement de développement :</p>
-                <ul>
-                    <li>PHP {$php}</li>
-                    <li>Base de données : {$base}</li>
-                </ul>
-            </body>
-            </html>
-            HTML;
+            <p>
+                Découvrez les données disponibles sur la qualité de l'eau
+                en France et explorez les différents indicateurs de qualité
+                de manière simple et accessible.
+            </p>
+
+            <div >
+                <a href="/index.php?page=donnees" class="btn btn-primary">
+                    Explorer les données
+                </a>
+
+                <a href="/index.php?page=inscription" class="btn btn-secondary">
+                    Créer un compte
+                </a>
+            </div>
+        </div>
+
+        <div >
+            <div >
+                <span>💧</span>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Introduction text / explications-->
+    <section>
+        <span>NOTRE OBJECTIF</span>
+
+        <h2>
+            Des données pour mieux comprendre notre eau
+        </h2>
+
+        <p>
+            La qualité de l'eau est un enjeu essentiel pour la santé,
+            l'environnement et les territoires. Notre objectif est de
+            rendre les données disponibles plus accessibles et plus
+            faciles à comprendre.
+        </p>
+    </section>
+</div>
+
+        <?php
+        return (new Layout("Accueil","Page d'accueil",ob_get_clean()))->afficher();
     }
 
     private static function echapper(string $texte): string
