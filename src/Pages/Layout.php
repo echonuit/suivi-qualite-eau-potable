@@ -1,5 +1,6 @@
 <?php
 
+namespace EauPotable\Pages;
 class Layout{
     public function __construct(  
         private string $titre,
@@ -8,8 +9,7 @@ class Layout{
     ){}
       
     public function afficher(): string{
-        ?>
-        ob_start();
+        ob_start();?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
