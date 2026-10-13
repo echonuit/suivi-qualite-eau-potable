@@ -8,8 +8,9 @@ class Layout{
         private string $contenu
     ){}
       
-    public function show(): void{
+    public function afficher(): string{
         ?>
+        ob_start();
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -31,5 +32,6 @@ class Layout{
 </body>
 </html>
     <?php
+    return ob_get_clean();
     }
 }
